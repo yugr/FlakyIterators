@@ -1,0 +1,8 @@
+# Build files
+bin
+
+# GDB
+.gdb_history
+
+# Vim files
+.*.swp
