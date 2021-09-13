@@ -16,7 +16,7 @@ are encountered in a loop.
 
 # How to build
 
-To build, install `libclang-dev` and run
+To build, install (on Debian/Ubuntu) `llvm` and `libclang-dev` and run
 ```
 $ make clean all
 ```

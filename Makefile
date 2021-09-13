@@ -7,7 +7,7 @@
 
 $(shell mkdir -p bin)
 
-LLVM_CONFIG ?= llvm-config-10
+LLVM_CONFIG ?= llvm-config
 DESTDIR ?= /usr/local/bin
 
 CXX = g++
