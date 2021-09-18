@@ -30,8 +30,12 @@ bool IsFlakyType(CXType Ty) {
     int Nargs = clang_Type_getNumTemplateArguments(Ty);
     assert(Nargs > 0);
     auto KeyTy = clang_Type_getTemplateArgumentAsType(Ty, 0);
-    if (KeyTy.kind == CXType_Pointer)
-      return true;
+    if (KeyTy.kind == CXType_Pointer) {
+      // But only if default comparator is used
+      auto CompareTy = clang_Type_getTemplateArgumentAsType(Ty, 2);
+      auto CompareTyName = ToStr(clang_getTypeSpelling(CompareTy));
+      return StartsWith(CompareTyName.c_str(), "std::less<");
+    }
   }
   return false;
 }
