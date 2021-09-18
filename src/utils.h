@@ -16,4 +16,8 @@ std::string RealPath(const char *p);
 
 bool StartsWith(const char *S, const char *Prefix);
 
+void trim(std::string &S);
+
+std::string readPatterns(const std::string &Filename, int Verbose);
+
 #endif

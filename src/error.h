@@ -7,6 +7,7 @@
 
 void SetProgName(const char *Prog);
 
+// TODO: automatically append '\n' and call exit(1) in Error()
 std::ostream &Error();
 
 std::ostream &Warning();

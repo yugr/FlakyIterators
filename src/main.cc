@@ -15,6 +15,7 @@
 #include "error.h"
 
 #include <clang-c/Index.h>
+#include <pcrecpp.h>
 
 #include <stdlib.h>
 #include <libgen.h>
@@ -33,6 +34,7 @@ Options:\n\
   -h, --help                 Print this help and exit.\n\
   -v, --verbose              Enable debug prints.\n\
   -c FLAGS, --cflags FLAGS   Specify CFLAGS to use.\n\
+  -p FILE, --patterns FILE   Specify file with PCREs for IO function names.\n\
 ", prog);
   exit(0);
 }
@@ -45,16 +47,18 @@ int main(int argc, char *argv[]) {
 
   int Verbose = 0;
   std::string FlagsString;
+  std::string PatternsFile;
 
   while (1) {
     static struct option long_opts[] = {
       {"verbose", no_argument, 0, 'v'},
       {"cflags", required_argument, 0, 'c'},
+      {"patterns", required_argument, 0, 'p'},
       {"help", no_argument, 0, 'h'},
     };
 
     int opt_index = 0;
-    int c = getopt_long(argc, argv, "vc:h", long_opts, &opt_index);
+    int c = getopt_long(argc, argv, "vc:hp:", long_opts, &opt_index);
 
     if (c == -1)
       break;
@@ -65,6 +69,9 @@ int main(int argc, char *argv[]) {
       break;
     case 'c':
       FlagsString = optarg;
+      break;
+    case 'p':
+      PatternsFile = optarg;
       break;
     case 'h':
       usage(me);
@@ -91,6 +98,15 @@ int main(int argc, char *argv[]) {
     Error() << "no files specified" << '\n';
     exit(1);
   }
+
+  // Read patterns
+
+  std::string Patterns = "[pP]rint|[dD]ump";
+  if (!PatternsFile.empty()) {
+    Patterns = readPatterns(PatternsFile, Verbose);
+  }
+
+  pcrecpp::RE Pat(Patterns);
 
   // Analyze files
 
@@ -123,7 +139,7 @@ int main(int argc, char *argv[]) {
     if (AnyError)
       return 1;
 
-    FlakyIteratorsContext Ctx(Verbose);
+    FlakyIteratorsContext Ctx(Pat, Verbose);
     clang_visitChildren(clang_getTranslationUnitCursor(Unit), analyzeProgram, (CXClientData)&Ctx);
 
     clang_disposeIndex(Idx);

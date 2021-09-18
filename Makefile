@@ -14,6 +14,7 @@ CXX = g++
 
 CXXFLAGS = $(shell $(LLVM_CONFIG) --cflags) -std=c++17 -g -Wall -Wextra -Werror
 LDFLAGS = $(shell $(LLVM_CONFIG) --ldflags)
+LIBS = -lclang -lpcrecpp
 
 ifeq (,$(DEBUG))
   CXXFLAGS += -O2
@@ -36,7 +37,7 @@ install:
 	install bin/find-flaky $(DESTDIR)
 
 bin/find-flaky: bin/main.o bin/utils.o bin/analysis.o bin/error.o bin/clang-utils.o
-	$(CXX) $(LDFLAGS) -o $@ $^ -lclang
+	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 bin/%.o: src/%.cc
 	$(CXX) $(CXXFLAGS) -o $@ -c $^

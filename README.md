@@ -16,7 +16,11 @@ are encountered in a loop.
 
 # How to build
 
-To build, install (on Debian/Ubuntu) `llvm` and `libclang-dev` and run
+To build, install (on Debian/Ubuntu) `llvm`, `libclang-dev` and `libpcre3-dev`:
+```
+$ sudo apt-get install llvm libclang-dev libpcre3-dev
+```
+and run
 ```
 $ make clean all
 ```
@@ -31,7 +35,18 @@ $ bin/find-flaky tests/3-unordered-map-notok.cc
 find-flaky: warning: calling IO function 'printf' inside flaky loop
 ```
 
-Custom compile flags can be supplied with `--cflags` parameter and
+By default tool looks for most common IO functions (like `printf`)
+but you provide your own patterns:
+```
+$ cat patterns.txt
+# A useful comment
+my_debug_fun
+# Another one
+other_fun
+$ bin/find-flaky --patterns patterns.txt ...
+```
+
+Custom compile flags (usually `-D` and `-I`) can be supplied with `--cflags` parameter and
 verbosity can be set with `-v` flag.
 For additional options run `bin/find-flaky -h`.
 
@@ -45,5 +60,4 @@ Found no errors
 
 # TODO
 
-* read functions from file
 * support other loop types

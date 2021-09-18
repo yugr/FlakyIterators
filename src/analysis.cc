@@ -42,21 +42,6 @@ bool IsFlakyType(CXType Ty) {
   return false;
 }
 
-bool isIOCall(const std::string &Name) {
-  // TODO: get list of relevant APIs from file
-  // TODO: add std::cout/err and stream operators in general
-  const char *Prefixes[] = {
-    "print", "Print",
-    "dump", "Dump",
-  };
-  for (size_t i = 0; i < sizeof(Prefixes)/sizeof(Prefixes[0]); ++i) {
-    if (strstr(Name.c_str(), Prefixes[i])) {
-      return true;
-    }
-  }
-  return false;
-}
-
 } // anon namespace
 
 enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData Data) {
@@ -81,7 +66,7 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
       std::string Name = ToStr(clang_getCursorSpelling(C));
       if (Ctx.v())
         Note() << "calling function '" << Name << "'\n";
-      if (Ctx.isInFlakyLoop() && isIOCall(Name)) {
+      if (Ctx.isInFlakyLoop() && Ctx.isIOCall(Name)) {
         Warning() << "calling IO function '" << Name << "' inside flaky loop\n";
       }
       return CXChildVisit_Continue;

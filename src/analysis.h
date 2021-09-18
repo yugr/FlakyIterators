@@ -11,20 +11,23 @@
 #define ANALYSIS_H
 
 #include <clang-c/Index.h>
+#include <pcrecpp.h>
 
 #include <vector>
+#include <string>
 
 class FlakyIteratorsContext {
   struct LoopInfo {
     bool Flaky;
     LoopInfo(bool Flaky) : Flaky(Flaky) {}
   };
+  const pcrecpp::RE &Pat;
   std::vector<LoopInfo> Loops;
   int Verbose;
 
 public:
 
-  FlakyIteratorsContext(int Verbose) : Verbose(Verbose) {
+  FlakyIteratorsContext(const pcrecpp::RE &Pat, int Verbose) : Pat(Pat), Verbose(Verbose) {
     Loops.push_back(LoopInfo(false));
   }
 
@@ -40,6 +43,10 @@ public:
 
   void pop() {
     Loops.pop_back();
+  }
+
+  bool isIOCall(const std::string &Name) const {
+    return Pat.PartialMatch(Name);
   }
 };
 
