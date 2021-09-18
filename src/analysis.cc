@@ -20,7 +20,7 @@
 namespace {
 
 bool IsFlakyType(CXType Ty) {
-  // TODO: do I need clang_getCanonicalType ?
+  Ty = clang_getCanonicalType(Ty);  // Look through type aliases
   auto TypeName = ToStr(clang_getTypeSpelling(Ty));
 //  std::cerr << "IsFlakyType: " << TypeName << '\n';
   if (StartsWith(TypeName.c_str(), "std::unordered_map<"))
