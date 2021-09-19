@@ -19,10 +19,11 @@
 
 namespace {
 
-bool IsFlakyType(CXType Ty) {
+bool IsFlakyType(CXType Ty, int Verbose) {
   Ty = clang_getCanonicalType(Ty);  // Look through type aliases
   auto TypeName = ToStr(clang_getTypeSpelling(Ty));
-//  std::cerr << "IsFlakyType: " << TypeName << '\n';
+  if (Verbose)
+    std::cerr << "IsFlakyType: " << TypeName << '\n';
   if (StartsWith(TypeName.c_str(), "std::unordered_map<")
       || StartsWith(TypeName.c_str(), "std::unordered_set<"))
     return true;
@@ -90,7 +91,7 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
         Error() << "failed to analyze iteration object in loop at " << ExpLoc << '\n';
         break;
       }
-      Ctx.push(IsFlakyType(Ty));  // Check if iteration order is flaky
+      Ctx.push(IsFlakyType(Ty, Ctx.v()));  // Check if iteration order is flaky
       visitParentAndChildren(Children[2], analyzeProgram, (CXClientData)&Ctx);
       Ctx.pop();
       return CXChildVisit_Continue;

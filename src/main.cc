@@ -25,7 +25,9 @@
 #include <vector>
 #include <iostream>
 
-static void usage(const char *prog) {
+namespace {
+
+void usage(const char *prog) {
   printf("\
 Usage: %s [OPT]... FILE...\n\
 Print APIs provided by header(s).\n\
@@ -38,6 +40,8 @@ Options:\n\
 ", prog);
   exit(0);
 }
+
+} // anon namespace
 
 int main(int argc, char *argv[]) {
   const char *me = basename((char *)argv[0]);

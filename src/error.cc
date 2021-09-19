@@ -2,7 +2,11 @@
 
 #include <iostream>
 
-static const char *Prog_ = "<unknown>";
+namespace {
+
+const char *Prog_ = "<unknown>";
+
+}  // anon namespace
 
 void SetProgName(const char *Prog) {
   Prog_ = Prog;
