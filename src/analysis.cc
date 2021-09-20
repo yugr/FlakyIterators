@@ -66,6 +66,7 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
   case CXCursor_CallExpr: {
       std::string Name = ToStr(clang_getCursorSpelling(C));
       if (Name.empty()) {
+        // TODO: why do we get empty names?
 //        Warning() << ExpLoc << ": unable to get function name" << '\n';
       }
       if (Ctx.v()) {
