@@ -1,2 +1,2 @@
-find-flaky: warning: calling IO function 'printf' inside flaky loop
-find-flaky: warning: calling IO function 'printf' inside flaky loop
+find-flaky: warning: 05-alias-notok.cc:9:5: calling IO function 'printf' inside flaky loop
+find-flaky: warning: 05-alias-notok.cc:18:5: calling IO function 'printf' inside flaky loop

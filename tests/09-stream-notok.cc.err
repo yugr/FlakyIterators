@@ -1,0 +1,1 @@
+find-flaky: warning: 09-stream-notok.cc:9:5: calling IO function 'operator<<' inside flaky loop

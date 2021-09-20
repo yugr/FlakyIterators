@@ -16,7 +16,7 @@
 
 std::string ToStr(CXString S) {
   const char *CS = clang_getCString(S);
-  std::string Str(CS);
+  std::string Str(CS ? CS : "");
   clang_disposeString(S);
   return Str;
 }
@@ -25,7 +25,11 @@ Location ParseLoc(CXSourceLocation Loc, bool Expansion) {
   CXFile F;
   unsigned Line, Col;
   (Expansion ? clang_getExpansionLocation : clang_getSpellingLocation)(Loc, &F, &Line, &Col, 0);
-  return Location(RealPath(ToStr(clang_getFileName(F)).c_str()), Line, Col);
+  auto FileName = ToStr(clang_getFileName(F));
+  // Code in _Pragma or cmdline defs has empty filenames
+//  FileName = FileName.empty() ? FileName : RealPath(FileName.c_str());
+  return Location(FileName, Line, Col);
+
 }
 
 namespace {

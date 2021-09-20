@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
 
   // Read patterns
 
-  std::string Patterns = "[pP]rint|[dD]ump";
+  std::string Patterns = "[pP]rint|[dD]ump|operator<<";
   if (!PatternsFile.empty()) {
     Patterns = readPatterns(PatternsFile, Verbose);
   }

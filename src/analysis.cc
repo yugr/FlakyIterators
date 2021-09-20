@@ -51,7 +51,7 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
 
   auto L = clang_getCursorLocation(C);
   auto ExpLoc = ParseLoc(L, true);
-//  auto SpellLoc = ParseLoc(RawLoc, false);
+//  auto SpellLoc = ParseLoc(L, false);
 
   // Skip system includes
   const char SysPrefix[] = "/usr/";
@@ -65,10 +65,14 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
   switch (C.kind) {
   case CXCursor_CallExpr: {
       std::string Name = ToStr(clang_getCursorSpelling(C));
-      if (Ctx.v())
-        Note() << "calling function '" << Name << "'\n";
+      if (Name.empty()) {
+//        Warning() << ExpLoc << ": unable to get function name" << '\n';
+      }
+      if (Ctx.v()) {
+        Note() << ExpLoc << ": calling function '" << Name << "'\n";
+      }
       if (Ctx.isInFlakyLoop() && Ctx.isIOCall(Name)) {
-        Warning() << "calling IO function '" << Name << "' inside flaky loop\n";
+        Warning() << ExpLoc << ": calling IO function '" << Name << "' inside flaky loop\n";
       }
       return CXChildVisit_Continue;
     }
@@ -76,11 +80,11 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
   case CXCursor_CXXForRangeStmt: {
       auto Children = GetChildren(C);
       if (Children.size() != 3) {
-        Error() << "failed to parse loop at " << ExpLoc << '\n';
+        Error() << ExpLoc << ": failed to parse loop\n";
         break;
       }
       if (Ctx.v()) {
-        Note() << "found CXXForRangeStmt:"
+        Note() << ExpLoc << ": found CXXForRangeStmt:"
           << "\n  0: " << PrintCursor(Children[0])
           << "\n  1: " << PrintCursor(Children[1])
           << "\n  2: " << PrintCursor(Children[2])
@@ -88,7 +92,7 @@ enum CXChildVisitResult analyzeProgram(CXCursor C, CXCursor Parent, CXClientData
       }
       CXType Ty = clang_getCursorType(Children[1]);
       if (Ty.kind == CXType_Invalid) {
-        Error() << "failed to analyze iteration object in loop at " << ExpLoc << '\n';
+        Error() << ExpLoc << ": failed to analyze iteration object in loop\n";
         break;
       }
       Ctx.push(IsFlakyType(Ty, Ctx.v()));  // Check if iteration order is flaky
