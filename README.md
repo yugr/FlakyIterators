@@ -1,3 +1,9 @@
+[![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/yugr/FlakyIterators/blob/master/LICENSE.txt)
+[![Build Status](https://github.com/yugr/FlakyIterators/actions/workflows/ci.yml/badge.svg)](https://github.com/yugr/FlakyIterators/actions)
+[![codecov](https://codecov.io/gh/yugr/FlakyIterators/branch/master/graph/badge.svg)](https://codecov.io/gh/yugr/FlakyIterators)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/yugr/FlakyIterators.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/yugr/FlakyIterators/alerts/)
+[![Coverity Scan](https://scan.coverity.com/projects/yugr-FlakyIterators/badge.svg)](https://scan.coverity.com/projects/yugr-FlakyIterators)
+
 A fast and dirty checker which detects non-deterministic iteration e.g.
 ```
 std::unordered_map<...> map;
