@@ -14,6 +14,10 @@ for (auto [k, v] : map) {
 Warnings are reported only if functions with predefined names (e.g. `printf`)
 are encountered in a loop.
 
+# Comparison with Clang Static Analyzer
+
+CSA's [PointerIteration](https://clang.llvm.org/docs/analyzer/checkers.html#alpha-nondeterminism-pointeriteration-c) does not report nondeterministic iteration neither over ordered containers of pointers, nor over unordered containers of non-pointers.
+
 # How to build
 
 To build, install (on Debian/Ubuntu) `llvm`, `libclang-dev` and `libpcre3-dev`:
