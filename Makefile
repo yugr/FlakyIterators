@@ -18,7 +18,7 @@ LIBS = -lclang -lpcrecpp
 
 ifneq (,$(COVERAGE))
   DEBUG = 1
-  CXXFLAGS += -DNDEBUG --coverage
+  CXXFLAGS += --coverage -DNDEBUG
   LDFLAGS += --coverage
 endif
 ifeq (,$(DEBUG))
