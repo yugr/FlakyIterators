@@ -10,12 +10,17 @@ $(shell mkdir -p bin)
 LLVM_CONFIG ?= llvm-config
 DESTDIR ?= /usr/local/bin
 
-CXX = g++
+CXX ?= g++
 
 CXXFLAGS = $(shell $(LLVM_CONFIG) --cflags) -std=c++17 -g -Wall -Wextra -Werror
 LDFLAGS = $(shell $(LLVM_CONFIG) --ldflags)
 LIBS = -lclang -lpcrecpp
 
+ifneq (,$(COVERAGE))
+  DEBUG = 1
+  CXXFLAGS += -DNDEBUG --coverage
+  LDFLAGS += --coverage
+endif
 ifeq (,$(DEBUG))
   CXXFLAGS += -O2
   LDFLAGS += -Wl,-O2
