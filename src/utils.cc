@@ -29,7 +29,9 @@ bool StartsWith(const char *S, const char *Prefix) {
 void trim(std::string &S) {
   const char *ws = " \t";
   S.erase(0, S.find_first_not_of(ws));
-  S.erase(S.find_last_not_of(ws) + 1);
+  auto Last = S.find_last_not_of(ws);
+  if (Last != std::string::npos)
+    S.erase(Last + 1);
 }
 
 std::string readPatterns(const std::string &Filename, int Verbose) {
