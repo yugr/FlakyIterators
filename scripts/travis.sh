@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2021 Yury Gribov
+# Copyright 2021-2022 Yury Gribov
 # 
 # Use of this source code is governed by MIT license that can be
 # found in the LICENSE.txt file.
@@ -14,6 +14,18 @@ fi
 cd $(dirname $0)/..
 
 make "$@" clean all
+
+if test -n "${VALGRIND:-}"; then
+  cp -r bin bin-real
+  for f in $(find bin -type f -a -executable); do
+    cat > $f <<EOF
+#!/bin/sh
+valgrind -q --suppressions=$PWD/scripts/valgrind.supp $PWD/bin-real/$(basename $f) "\$@"
+EOF
+    chmod +x $f
+  done
+fi
+
 make "$@" test
 
 # Upload coverage

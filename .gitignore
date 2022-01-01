@@ -6,3 +6,6 @@ bin
 
 # Vim files
 .*.swp
+
+# Test files
+bin-real

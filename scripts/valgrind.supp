@@ -1,0 +1,6 @@
+{
+   ignore_libclang_conditional_jump_errors
+   Memcheck:Cond
+   ...
+   obj:*/libclang*
+}
