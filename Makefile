@@ -60,5 +60,6 @@ test:
 
 clean:
 	rm -f bin/*
+	find -name \*.gcov -o -name \*.gcno -o -name \*.gcda | xargs rm -rf
 
 .PHONY: all install clean test
