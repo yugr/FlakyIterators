@@ -47,11 +47,11 @@ all: bin/find-flaky
 install:
 	install bin/find-flaky $(DESTDIR)
 
-bin/find-flaky: bin/main.o bin/utils.o bin/analysis.o bin/error.o bin/clang-utils.o
-	$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+bin/find-flaky: bin/main.o bin/utils.o bin/analysis.o bin/error.o bin/clang-utils.o Makefile
+	$(CXX) $(LDFLAGS) -o $@ $(filter %.o, $^) $(LIBS)
 
-bin/%.o: src/%.cc
-	$(CXX) $(CXXFLAGS) -o $@ -c $^
+bin/%.o: src/%.cc Makefile
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 bin/%.o: src/analysis.h src/utils.h src/error.h src/clang-utils.h
 
