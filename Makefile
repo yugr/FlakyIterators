@@ -7,10 +7,9 @@
 
 $(shell mkdir -p bin)
 
-LLVM_CONFIG ?= llvm-config
-DESTDIR ?= /usr/local/bin
-
 CXX ?= g++
+LLVM_CONFIG ?= llvm-config
+DESTDIR ?= /usr/local
 
 CXXFLAGS = $(shell $(LLVM_CONFIG) --cflags) -std=c++17 -g -Wall -Wextra -Werror
 LDFLAGS = $(shell $(LLVM_CONFIG) --ldflags) -Wl,--warn-common
@@ -45,7 +44,8 @@ endif
 all: bin/find-flaky
 
 install:
-	install bin/find-flaky $(DESTDIR)
+	mkdir -p $(DESTDIR)
+	install bin/find-flaky $(DESTDIR)/bin
 
 bin/find-flaky: bin/main.o bin/utils.o bin/analysis.o bin/error.o bin/clang-utils.o Makefile bin/FLAGS
 	$(CXX) $(LDFLAGS) -o $@ $(filter %.o, $^) $(LIBS)
