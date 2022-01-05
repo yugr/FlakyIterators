@@ -47,13 +47,18 @@ all: bin/find-flaky
 install:
 	install bin/find-flaky $(DESTDIR)
 
-bin/find-flaky: bin/main.o bin/utils.o bin/analysis.o bin/error.o bin/clang-utils.o Makefile
+bin/find-flaky: bin/main.o bin/utils.o bin/analysis.o bin/error.o bin/clang-utils.o Makefile bin/FLAGS
 	$(CXX) $(LDFLAGS) -o $@ $(filter %.o, $^) $(LIBS)
 
-bin/%.o: src/%.cc Makefile
+bin/%.o: src/%.cc Makefile bin/FLAGS
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 bin/%.o: src/analysis.h src/utils.h src/error.h src/clang-utils.h
+
+bin/FLAGS: FORCE
+	if test x"$(CXXFLAGS) $(LDFLAGS)" != x"$$(cat $@)"; then \
+		echo "$(CXXFLAGS) $(LDFLAGS)" > $@; \
+	fi
 
 test:
 	tests/run.sh
@@ -62,4 +67,4 @@ clean:
 	rm -f bin/*
 	find -name \*.gcov -o -name \*.gcno -o -name \*.gcda | xargs rm -rf
 
-.PHONY: all install clean test
+.PHONY: all install clean test FORCE
