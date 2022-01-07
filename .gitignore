@@ -5,7 +5,10 @@ bin
 .gdb_history
 
 # Vim files
-.*.swp
+.*swp
 
 # Test files
 bin-real
+*.gcov
+*.gcda
+*.gcno
