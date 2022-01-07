@@ -31,7 +31,7 @@ export ASAN_OPTIONS='detect_stack_use_after_return=1:check_initialization_order=
 make "$@" test
 
 # Upload coverage
-if test -n "${CODECOV_TOKEN:-}"; then
+if test -n "${COVERAGE:-}"; then
   curl --retry 5 -s https://codecov.io/bash > codecov.bash
   bash codecov.bash -Z
 fi
