@@ -60,11 +60,11 @@ bin/FLAGS: FORCE
 		echo "$(CXXFLAGS) $(LDFLAGS)" > $@; \
 	fi
 
-test:
+check:
 	tests/run.sh
 
 clean:
 	rm -f bin/*
 	find -name \*.gcov -o -name \*.gcno -o -name \*.gcda | xargs rm -rf
 
-.PHONY: all install clean test FORCE
+.PHONY: all install clean check FORCE
