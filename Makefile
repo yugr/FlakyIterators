@@ -56,8 +56,8 @@ bin/%.o: src/%.cc Makefile bin/FLAGS
 bin/%.o: src/analysis.h src/utils.h src/error.h src/clang-utils.h
 
 bin/FLAGS: FORCE
-	if test x"$(CXXFLAGS) $(LDFLAGS)" != x"$$(cat $@)"; then \
-		echo "$(CXXFLAGS) $(LDFLAGS)" > $@; \
+	if test x"$(CFLAGS) $(CXXFLAGS) $(LDFLAGS)" != x"$$(cat $@)"; then \
+		echo "$(CFLAGS) $(CXXFLAGS) $(LDFLAGS)" > $@; \
 	fi
 
 check:
